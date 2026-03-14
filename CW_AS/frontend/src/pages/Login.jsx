@@ -1,43 +1,67 @@
-import {useState} from "react"
+import {useState} from "react";
 import API from "../api/api"
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate(); 
 
-function Login(){
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/login", {
+        email,
+        password,
+      });
+      
+      localStorage.setItem("token", response.data.token);
+      setMessage("Login Successful! Welcome " + response.data.user.email);
+      setTimeout(() => {
+        navigate("/dashboard"); 
+      }, 2000);
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Login failed");
+    }
+  };
 
-const [email,setEmail]=useState("")
-const [password,setPassword]=useState("")
+  return (
+    <div className="auth-card">
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <div className="input-group">
+          <label>Email Address</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@iit.ac.lk"
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+            <p>
+            Don't have an account? <Link to="/register">Register</Link>
+            </p>
+        </div>
+        <div>
+        <button type="submit" className="auth-btn">Sign In</button>
+        </div>
+      </form>
+      {message && <p className="message">{message}</p>}
+    </div>
+  );
+};
 
-const login=async(e)=>{
-e.preventDefault()
-
-const res = await API.post("/auth/login",{email,password})
-
-localStorage.setItem("token",res.data.token)
-
-alert("Login successful")
-}
-
-return(
-<div>
-
-<div className="background">
-
-    <h2>Login</h2>
-
-    <form onSubmit={login}>
-
-    <input onChange={e=>setEmail(e.target.value)} />
-
-    <input type="password"
-    onChange={e=>setPassword(e.target.value)} />
-
-    <button>Login</button>
-
-    </form>
-
-</div>
-
-</div>
-)
-}
-
-export default Login
+export default Login;
