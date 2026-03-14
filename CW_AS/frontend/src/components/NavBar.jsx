@@ -58,9 +58,9 @@ const NavBar = () => {
           <Link to="/login" className="btn-signin">
             Sign In
           </Link>
-          <Link to="/register" className="btn-signup">
+          {/* <Link to="/register" className="btn-signup">
             Sign Up
-          </Link>
+          </Link> */}
           <button 
             onClick={handleSignOut} 
             className="btn-signout"

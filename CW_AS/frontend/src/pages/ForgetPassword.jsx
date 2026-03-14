@@ -3,7 +3,7 @@ import axios from "axios";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -13,26 +13,26 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/register", {
+      const response = await axios.post("http://localhost:3000/api/auth/forget-password", {
         email,
         password,
       });
 
-      setMessage("Registration Successful! Redirecting to login...");
+      setMessage("Reset Password Successfully! Redirecting to login...");
       
       setTimeout(() => {
         navigate("/login"); 
       }, 2000);
 
     } catch (err) {
-      setMessage(err.response?.data?.error || "Registration failed");
+      setMessage(err.response?.data?.error || "Reset Password Failed");
     }
   };
 
   return (
     <div className="card">
     <div className="auth-card">
-      <h2>Register</h2>
+      <h2>Forget Password</h2>
       <form onSubmit={handleRegister}>
         <div className="input-group">
           <label>Email Address</label>
@@ -40,7 +40,7 @@ const Register = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="lakshan.20221551@iit.ac.lk"
+            // placeholder="lakshan.20221551@iit.ac.lk"
             required
           />
         </div>
@@ -53,7 +53,7 @@ const Register = () => {
             required
           />
         </div>
-        <button type="submit" className="auth-btn register-btn">Create Account</button>
+        <button type="submit" className="auth-btn register-btn">Reset Password</button>
       </form>
       {message && <p className="message success">{message}</p>}
     </div>
@@ -61,4 +61,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ForgetPassword;

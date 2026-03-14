@@ -53,11 +53,16 @@ const Login = () => {
         </div>
         <div>
             <p>
-            Don't have an account? <Link to="/register">Register</Link>
+             <Link to="/forget-password">Forgot Password?</Link>
             </p>
         </div>
         <div>
         <button type="submit" className="auth-btn">Sign In</button>
+        </div>
+        <div>
+            <p>
+            Don't have an account? <Link to="/register">Register</Link>
+            </p>
         </div>
       </form>
       {message && <p className="message">{message}</p>}
