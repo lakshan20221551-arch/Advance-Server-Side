@@ -30,6 +30,7 @@ const Register = () => {
   };
 
   return (
+    <div className="card">
     <div className="auth-card">
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
@@ -55,6 +56,7 @@ const Register = () => {
         <button type="submit" className="auth-btn register-btn">Create Account</button>
       </form>
       {message && <p className="message success">{message}</p>}
+    </div>
     </div>
   );
 };

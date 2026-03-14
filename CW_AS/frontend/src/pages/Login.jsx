@@ -28,6 +28,7 @@ const Login = () => {
   };
 
   return (
+    <div className="card">
     <div className="auth-card">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
@@ -60,6 +61,7 @@ const Login = () => {
         </div>
       </form>
       {message && <p className="message">{message}</p>}
+    </div>
     </div>
   );
 };

@@ -66,10 +66,18 @@
     border-radius: 5px;
 }
 
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+}
 .auth-card {
+  width: 100%;
   max-width: 400px;
-  margin: 50px auto;
-  padding: 30px;
+  margin: auto;
+  padding: 50px;
+
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
