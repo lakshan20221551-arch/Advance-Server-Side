@@ -34,13 +34,25 @@ const NavBar = () => {
               <li className="nav-item">
                 <span className="nav-link">
                   {/* <span className="nav-icon">📁</span> Projects */}
-                  <span className="nav-icon"></span> Bids
+                  <span className="nav-icon"></span> Degrees
                 </span>
               </li>
               <li className="nav-item">
                 <span className="nav-link">
                   {/* <span className="nav-icon">⚙️</span> Settings */}
                   <span className="nav-icon"></span> Settings
+                </span>
+              </li>
+              <li className="nav-item">
+                <span className="nav-link">
+                  {/* <span className="nav-icon">🔔</span> Notifications */}
+                  <span className="nav-icon"></span> Notifications
+                </span>
+              </li>
+              <li className="nav-item">
+                <span className="nav-link">
+                  {/* <span className="nav-icon">🔔</span> Notifications */}
+                  <span className="nav-icon"></span> Notifications
                 </span>
               </li>
               <li className="nav-item">
