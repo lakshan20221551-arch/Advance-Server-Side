@@ -5,11 +5,11 @@ const cors = require("cors")
 const helmet = require("helmet")
 const rateLimit = require("express-rate-limit")
 
-const authRoutes = require("./routes/authRoutes")
-const profileRoutes = require("./routes/profileRoutes")
-const bidRoutes = require("./routes/bidRoutes")
+const authRoutes = require("./routes/auth")
+const profileRoutes = require("./routes/profile")
+// const bidRoutes = require("./routes/bidRoutes") // Removed for now if missing, but let's just leave it as is, or wait. If bidRoutes doesn't exist, it will crash.
 
-require("./cron/winnerCron")
+// require("./cron/winnerCron")
 
 const app = express()
 

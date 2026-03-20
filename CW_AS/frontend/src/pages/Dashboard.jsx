@@ -12,7 +12,7 @@ const Dashboard = () => {
     const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/dashboard", {
+      const response = await axios.post("http://localhost:5000/api/auth/dashboard", {
         email,
         password,
       });

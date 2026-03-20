@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // --- REGISTER ROUTE ---
-// This calls your "InsertUser" stored procedure
+
 router.post("/register", async (req, res) => {
     const { email, password } = req.body;
 
@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
         await pool.request()
             .input("Email", sql.VarChar(1000), email)
             .input("Password", sql.VarChar(4000), hashedPassword)
-            .execute("dbo.InsertUser");
+            .execute("InsertUser");
 
         res.status(201).json({ message: "User registered successfully" });
 
@@ -32,9 +32,7 @@ router.post("/register", async (req, res) => {
 catch (err) {
     const errorMessage = err.message || "";
 
-    // Check if the error is one of our custom RAISERROR messages
     if (errorMessage.includes("MSG:")) {
-        // Strip the "MSG:" prefix to keep the UI clean
         const cleanMessage = errorMessage.split("MSG:")[1].trim();
         
         return res.status(400).json({ 
@@ -43,7 +41,6 @@ catch (err) {
         });
     }
 
-    // Fallback for real system/server errors
     console.error("System Error:", err);
     res.status(500).json({ 
         success: false, 

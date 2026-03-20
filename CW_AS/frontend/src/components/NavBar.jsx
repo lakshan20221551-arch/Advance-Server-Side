@@ -40,25 +40,31 @@ const NavBar = () => {
               <li className="nav-item">
                 <span className="nav-link">
                   {/* <span className="nav-icon">⚙️</span> Settings */}
-                  <span className="nav-icon"></span> Settings
+                  <span className="nav-icon"></span> Certifications
                 </span>
               </li>
               <li className="nav-item">
                 <span className="nav-link">
                   {/* <span className="nav-icon">🔔</span> Notifications */}
-                  <span className="nav-icon"></span> Notifications
+                  <span className="nav-icon"></span> Licenses
                 </span>
               </li>
               <li className="nav-item">
                 <span className="nav-link">
                   {/* <span className="nav-icon">🔔</span> Notifications */}
-                  <span className="nav-icon"></span> Notifications
+                  <span className="nav-icon"></span> Courses
                 </span>
               </li>
               <li className="nav-item">
                 <span className="nav-link">
                   {/* <span className="nav-icon">🔔</span> Notifications */}
-                  <span className="nav-icon"></span> Notifications
+                  <span className="nav-icon"></span> Employment
+                </span>
+              </li>
+              <li className="nav-item">
+                <span className="nav-link">
+                  {/* <span className="nav-icon">🔔</span> Notifications */}
+                  <span className="nav-icon"></span> Bidding
                 </span>
               </li>
             </>
@@ -66,6 +72,9 @@ const NavBar = () => {
         </ul>
         
         <div className="navbar-actions">
+          <Link to="/profile" className="btn-signin" style={{ marginRight: '10px' }}>
+            Profile
+          </Link>
           {/* Always show Sign In and Sign Out buttons */}
           <Link to="/login" className="btn-signin">
             Sign In
