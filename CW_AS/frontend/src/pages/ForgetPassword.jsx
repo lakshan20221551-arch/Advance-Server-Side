@@ -13,7 +13,7 @@ const ForgetPassword = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/forget-password", {
+      const response = await axios.post("http://localhost:3000/api/auth/forget-password", {
         email,
         password,
       });

@@ -27,7 +27,7 @@ const Profile = () => {
 
         const fetchProfile = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/profile/profile", {
+                const response = await axios.get("http://localhost:3000/api/profile/profile", {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 
@@ -79,7 +79,7 @@ const Profile = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:5000/api/profile/profile", data, {
+            const response = await axios.post("http://localhost:3000/api/profile/profile", data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${token}`

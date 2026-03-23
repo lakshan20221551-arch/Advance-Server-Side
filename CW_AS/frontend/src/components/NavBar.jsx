@@ -19,11 +19,12 @@ const NavBar = () => {
       <Link className="navbar-brand" to="/dashboard">
         Alumni Platform
       </Link>
-      
+
       <div className="navbar-content">
         <ul className="navbar-nav">
           {/* Show Home and 3 Menu Icons only on Dashboard */}
-          {isDashboardPage && (
+        {/* /* {isDashboardPage ||  * */}
+          {/* ( */}
             <>
               <li className="nav-item">
                 <Link className="nav-link" to="/dashboard">
@@ -32,16 +33,14 @@ const NavBar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <span className="nav-link">
-                  {/* <span className="nav-icon">📁</span> Projects */}
+                <Link className="nav-link" to="/degree">
                   <span className="nav-icon"></span> Degrees
-                </span>
+                </Link>
               </li>
               <li className="nav-item">
-                <span className="nav-link">
-                  {/* <span className="nav-icon">⚙️</span> Settings */}
+                <Link className="nav-link" to="/certificate">
                   <span className="nav-icon"></span> Certifications
-                </span>
+                </Link>
               </li>
               <li className="nav-item">
                 <span className="nav-link">
@@ -68,9 +67,9 @@ const NavBar = () => {
                 </span>
               </li>
             </>
-          )}
+          {/* )} */}
         </ul>
-        
+
         <div className="navbar-actions">
           <Link to="/profile" className="btn-signin" style={{ marginRight: '10px' }}>
             Profile
@@ -82,8 +81,8 @@ const NavBar = () => {
           {/* <Link to="/register" className="btn-signup">
             Sign Up
           </Link> */}
-          <button 
-            onClick={handleSignOut} 
+          <button
+            onClick={handleSignOut}
             className="btn-signout"
           >
             Sign Out

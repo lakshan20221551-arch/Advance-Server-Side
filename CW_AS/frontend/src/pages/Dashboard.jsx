@@ -1,40 +1,21 @@
-import React from 'react'       
-import axios from "axios";import { Link } from "react-router-dom";    
-import { useNavigate } from 'react-router-dom'   
-import { useEffect } from 'react';
-import { useState } from 'react';   
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 const Dashboard = () => {
-    const navigate = useNavigate(); 
-    const token = localStorage.getItem("token");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
-    const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/api/auth/dashboard", {
-        email,
-        password,
-      });
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-    //   setMessage("Registration Successful! Redirecting to login...");
-      
-    //   setTimeout(() => {
-    //     navigate("/"); 
-    //   }, 2000);
-
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Dashboard failed");
-    }
-  };
+  useEffect(() => {
     if (!token) {
-        navigate("/login");
+      navigate("/login");
     }
-    return (
-        <div>
-            <h2>Dashboard</h2>
-        </div>
-    );
-};  
+  }, [token, navigate]);
+
+  return (
+    <div>
+      <h2>Dashboard</h2>
+    </div>
+  );
+};
 
 export default Dashboard;
