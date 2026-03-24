@@ -10,6 +10,7 @@ import Degree from './pages/Degree';
 import Certificates from './pages/Certificates';
 import Licenses from './pages/Licenses';
 import ShortCourses from './pages/ShortCourses';
+import EmployementHistory from './pages/EmployementHistory';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/certificate" element={<Certificates />} />
         <Route path="/license" element={<Licenses />} />
         <Route path="/short-courses" element={<ShortCourses />} />
+        <Route path="/employment" element={<EmployementHistory />} />
       </Routes>
     </>
   );

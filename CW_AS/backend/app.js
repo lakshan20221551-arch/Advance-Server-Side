@@ -9,6 +9,7 @@ const authRoutes = require("./routes/auth")
 const profileRoutes = require("./routes/profile")
 const licenseRoutes = require("./routes/licenses")
 const shortCourseRoutes = require("./routes/shortCourses")
+const employmentRoutes = require("./routes/employmentHistory")
 const degreeRoutes = require("./routes/degree")
 // const bidRoutes = require("./routes/bidRoutes") // Removed for now if missing, but let's just leave it as is, or wait. If bidRoutes doesn't exist, it will crash.
 
@@ -32,5 +33,6 @@ app.use("/api/profile",profileRoutes)
 app.use("/api/degree",degreeRoutes)
 app.use("/api/license",licenseRoutes)
 app.use("/api/short-course",shortCourseRoutes)
+app.use("/api/employment",employmentRoutes)
 
 module.exports = app
