@@ -73,8 +73,7 @@ router.delete("/delete-license/:id", authMiddleware, async (req, res) => {
         await pool.request()
             .input("UserID", sql.Int, userId)
             .input("LicenseID", sql.Int, licenseId)
-            // Assuming a DeleteLicenseDetails procedure exists or using a direct query
-            .query("DELETE FROM AAP_LICENSE_DETAILS WHERE ald_user_id = @UserID AND ald_license_id = @LicenseID");
+            .execute("DeleteLicenseDetails");
 
         res.json({ success: true, message: "License record deleted successfully" });
     } catch (err) {

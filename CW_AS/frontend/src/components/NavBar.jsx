@@ -49,7 +49,7 @@ const NavBar = () => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/short-courses">
-                  <span className="nav-icon"></span> Courses
+                  <span className="nav-icon"></span> Short Courses
                 </Link>
               </li>
               <li className="nav-item">
