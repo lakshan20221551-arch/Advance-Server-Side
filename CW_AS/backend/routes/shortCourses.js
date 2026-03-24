@@ -73,8 +73,7 @@ router.delete("/delete-course/:id", authMiddleware, async (req, res) => {
         await pool.request()
             .input("UserID", sql.Int, userId)
             .input("CourseID", sql.Int, courseId)
-            // Assuming table name AAP_SHORT_COURSES and column names from the provided procedure
-            .query("DELETE FROM AAP_SHORT_COURSES WHERE asc_user_id = @UserID AND asc_course_id = @CourseID");
+            .execute("DeleteShortCourseDetails");
 
         res.json({ success: true, message: "Short course record deleted successfully" });
     } catch (err) {
