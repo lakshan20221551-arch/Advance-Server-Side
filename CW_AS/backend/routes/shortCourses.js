@@ -58,6 +58,11 @@ router.post("/course-update", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "Short course details saved successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("Short Course Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while saving short course details." });
     }
@@ -77,6 +82,11 @@ router.delete("/delete-course/:id", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "Short course record deleted successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("Delete Short Course Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while deleting the record." });
     }

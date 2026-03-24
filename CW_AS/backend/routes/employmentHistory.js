@@ -58,6 +58,11 @@ router.post("/employment-update", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "Employment history details saved successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("Employment Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while saving employment history details." });
     }
@@ -77,6 +82,11 @@ router.delete("/delete-employment/:id", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "Employment record deleted successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("Delete Employment Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while deleting the record." });
     }

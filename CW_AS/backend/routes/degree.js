@@ -61,7 +61,7 @@ router.post("/degree-update", authMiddleware, async (req, res) => {
         const errorMessage = err.message || "";
         if (errorMessage.includes("MSG:")) {
             const cleanMessage = errorMessage.split("MSG:")[1].trim();
-            return res.status(400).json({ success: false, message: cleanMessage });
+            return res.json({ success: true, message: cleanMessage });
         }
         console.error("Degree Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while saving degree details." });

@@ -58,6 +58,11 @@ router.post("/license-update", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "License details saved successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("License Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while saving license details." });
     }
@@ -77,6 +82,11 @@ router.delete("/delete-license/:id", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "License record deleted successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("Delete License Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while deleting the record." });
     }
