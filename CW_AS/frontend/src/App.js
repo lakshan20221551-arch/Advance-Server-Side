@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import Degree from './pages/Degree';
 import Certificates from './pages/Certificates';
 import Licenses from './pages/Licenses';
+import ShortCourses from './pages/ShortCourses';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/degree" element={<Degree />} />
         <Route path="/certificate" element={<Certificates />} />
         <Route path="/license" element={<Licenses />} />
+        <Route path="/short-courses" element={<ShortCourses />} />
       </Routes>
     </>
   );
