@@ -43,10 +43,9 @@ const NavBar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <span className="nav-link">
-                  {/* <span className="nav-icon">🔔</span> Notifications */}
+                <Link className="nav-link" to="/license">
                   <span className="nav-icon"></span> Licenses
-                </span>
+                </Link>
               </li>
               <li className="nav-item">
                 <span className="nav-link">

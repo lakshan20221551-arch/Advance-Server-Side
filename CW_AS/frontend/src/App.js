@@ -8,6 +8,7 @@ import ForgetPassword from './pages/ForgetPassword';
 import Profile from './pages/Profile';
 import Degree from './pages/Degree';
 import Certificates from './pages/Certificates';
+import Licenses from './pages/Licenses';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/degree" element={<Degree />} />
         <Route path="/certificate" element={<Certificates />} />
+        <Route path="/license" element={<Licenses />} />
       </Routes>
     </>
   );
