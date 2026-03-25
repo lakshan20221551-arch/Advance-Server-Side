@@ -60,7 +60,7 @@ router.post("/certificate-update", authMiddleware, async (req, res) => {
         const errorMessage = err.message || "";
         if (errorMessage.includes("MSG:")) {
             const cleanMessage = errorMessage.split("MSG:")[1].trim();
-            return res.status(400).json({ success: false, message: cleanMessage });
+            return res.json({ success: true, message: cleanMessage });
         }
         console.error("Certificate Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while saving certificate details." });
@@ -81,6 +81,11 @@ router.delete("/delete-certificate/:id", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "Certificate record deleted successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("Delete Certificate Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while deleting the record." });
     }

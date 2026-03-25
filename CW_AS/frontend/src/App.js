@@ -11,6 +11,7 @@ import Certificates from './pages/Certificates';
 import Licenses from './pages/Licenses';
 import ShortCourses from './pages/ShortCourses';
 import EmployementHistory from './pages/EmployementHistory';
+import Bid from './pages/Bid';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/license" element={<Licenses />} />
         <Route path="/short-courses" element={<ShortCourses />} />
         <Route path="/employment" element={<EmployementHistory />} />
+        <Route path="/bidding" element={<Bid />} />
       </Routes>
     </>
   );

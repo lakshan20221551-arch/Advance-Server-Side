@@ -7,10 +7,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setError("");
     try {
       const response = await axios.post("http://localhost:3000/api/auth/login", {
         email,
@@ -23,7 +26,7 @@ const Login = () => {
         navigate("/dashboard"); 
       }, 2000);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Login failed");  
+      setError(err.response?.data?.message || "Login failed");  
     }
   };
 
@@ -65,7 +68,8 @@ const Login = () => {
             </p>
         </div>
       </form>
-      {message && <p className="message">{message}</p>}
+      {message && <p className="message" style={{ color: 'green', background: '#e6fffa' }}>{message}</p>}
+      {error && <p className="message">{error}</p>}
     </div>
     </div>
   );

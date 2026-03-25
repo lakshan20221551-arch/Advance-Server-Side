@@ -11,9 +11,10 @@ const licenseRoutes = require("./routes/licenses")
 const shortCourseRoutes = require("./routes/shortCourses")
 const employmentRoutes = require("./routes/employmentHistory")
 const degreeRoutes = require("./routes/degree")
-// const bidRoutes = require("./routes/bidRoutes") // Removed for now if missing, but let's just leave it as is, or wait. If bidRoutes doesn't exist, it will crash.
+const certificateRoutes = require("./routes/certificate")
+const bidRoutes = require("./routes/bids") // Re-added
 
-// require("./cron/winnerCron")
+require("./cron/winnerCron")
 
 const app = express()
 
@@ -29,7 +30,8 @@ max:100
 
 app.use("/api/auth",authRoutes)
 app.use("/api/profile",profileRoutes)
-// app.use("/api/bids",bidRoutes)
+app.use("/api/certificate",certificateRoutes)
+app.use("/api/bids",bidRoutes)
 app.use("/api/degree",degreeRoutes)
 app.use("/api/license",licenseRoutes)
 app.use("/api/short-course",shortCourseRoutes)

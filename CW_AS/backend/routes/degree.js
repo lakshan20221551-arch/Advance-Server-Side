@@ -82,6 +82,11 @@ router.delete("/delete-degree/:id", authMiddleware, async (req, res) => {
 
         res.json({ success: true, message: "Degree record deleted successfully" });
     } catch (err) {
+        const errorMessage = err.message || "";
+        if (errorMessage.includes("MSG:")) {
+            const cleanMessage = errorMessage.split("MSG:")[1].trim();
+            return res.json({ success: true, message: cleanMessage });
+        }
         console.error("Delete Degree Error:", err);
         res.status(500).json({ success: false, message: "An error occurred while deleting the record." });
     }

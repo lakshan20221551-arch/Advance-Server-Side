@@ -7,11 +7,14 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   
   const navigate = useNavigate(); 
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setError("");
     try {
       const response = await axios.post("http://localhost:3000/api/auth/register", {
         email,
@@ -25,7 +28,7 @@ const Register = () => {
       }, 2000);
 
     } catch (err) {
-      setMessage(err.response?.data?.message);
+      setError(err.response?.data?.message || "Registration failed");
     }
   };
 
@@ -55,7 +58,8 @@ const Register = () => {
         </div>
         <button type="submit" className="auth-btn register-btn">Create Account</button>
       </form>
-      {message && <p className="message success">{message}</p>}
+      {message && <p className="message" style={{ color: 'green', background: '#e6fffa' }}>{message}</p>}
+      {error && <p className="message">{error}</p>}
     </div>
     </div>
   );
