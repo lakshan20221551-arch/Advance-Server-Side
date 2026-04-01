@@ -122,4 +122,42 @@ router.get("/status/:date", authMiddleware, async (req, res) => {
     }
 });
 
+// --- GET: Get Today's Alumni of the Day ---
+router.get("/winner-today", async (req, res) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .query(`
+                SELECT TOP 1 u.auv_name, p.apd_bio, p.apd_profile_image, w.adw_winning_amount
+                FROM AAP_ALUMNIOFTHE_DAY w
+                JOIN AAP_PROFILES_DETAILS p ON w.adw_profile_id = p.apd_profile_id
+                JOIN AAP_USERSDETAILS_VIEW u ON p.apd_user_id = u.auv_id
+                WHERE w.adw_selection_date = CAST(GETDATE() AS DATE)
+            `);
+
+        if (result.recordset.length > 0) {
+            const winner = result.recordset[0];
+            let imageBase64 = null;
+            if (winner.apd_profile_image) {
+                imageBase64 = `data:image/jpeg;base64,${winner.apd_profile_image.toString('base64')}`;
+            }
+
+            res.json({
+                success: true,
+                winner: {
+                    name: winner.auv_name,
+                    bio: winner.apd_bio,
+                    profileImage: imageBase64,
+                    amount: winner.adw_winning_amount
+                }
+            });
+        } else {
+            res.json({ success: true, winner: null });
+        }
+    } catch (err) {
+        console.error("Fetch Winner Error:", err);
+        res.status(500).json({ success: false, message: "Error fetching today's winner" });
+    }
+});
+
 module.exports = router;

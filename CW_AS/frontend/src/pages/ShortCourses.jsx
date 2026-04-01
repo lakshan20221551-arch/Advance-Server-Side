@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
@@ -19,7 +19,7 @@ const ShortCourses = () => {
         completionDate: ""
     });
 
-    const fetchCourses = async () => {
+    const fetchCourses = useCallback(async () => {
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/login");
@@ -40,11 +40,11 @@ const ShortCourses = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [navigate, setCourses]);
 
     useEffect(() => {
         fetchCourses();
-    }, []);
+    }, [fetchCourses]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

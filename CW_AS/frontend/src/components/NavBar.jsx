@@ -7,7 +7,8 @@ const NavBar = () => {
   const navigate = useNavigate();
   const path = location.pathname;
 
-  const isDashboardPage = path === '/dashboard';
+  const isAuthPage = path === '/login' || path === '/register' || path === '/forget-password' || path === '/';
+  const isAuthenticated = !!localStorage.getItem('token');
 
   const handleSignOut = () => {
     localStorage.removeItem('token');
@@ -16,19 +17,16 @@ const NavBar = () => {
 
   return (
     <nav className="navbar">
-      <Link className="navbar-brand" to="/dashboard">
-        Alumni Platform
+      <Link className="navbar-brand" to={isAuthenticated ? "/dashboard" : "/login"}>
+        ALUMNI PLATFORM
       </Link>
 
       <div className="navbar-content">
         <ul className="navbar-nav">
-          {/* Show Home and 3 Menu Icons only on Dashboard */}
-        {/* /* {isDashboardPage ||  * */}
-          {/* ( */}
+          {isAuthenticated && !isAuthPage && (
             <>
               <li className="nav-item">
                 <Link className="nav-link" to="/dashboard">
-                  {/* <span className="nav-icon">🏠</span> Home */}
                   <span className="nav-icon"></span> Home
                 </Link>
               </li>
@@ -62,27 +60,35 @@ const NavBar = () => {
                   <span className="nav-icon"></span> Bidding
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/developer">
+                  <span className="nav-icon"></span> Developer
+                </Link>
+              </li>
             </>
-          {/* )} */}
+          )}
         </ul>
 
         <div className="navbar-actions">
-          <Link to="/profile" className="btn-signin" style={{ marginRight: '10px' }}>
-            Profile
-          </Link>
-          {/* Always show Sign In and Sign Out buttons */}
-          <Link to="/login" className="btn-signin">
-            Sign In
-          </Link>
-          {/* <Link to="/register" className="btn-signup">
-            Sign Up
-          </Link> */}
-          <button
-            onClick={handleSignOut}
-            className="btn-signout"
-          >
-            Sign Out
-          </button>
+          {isAuthenticated && !isAuthPage ? (
+            <>
+              <Link to="/profile" className="btn-signin" style={{ marginRight: '10px' }}>
+                Profile
+              </Link>
+              <button onClick={handleSignOut} className="btn-signout">
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="btn-signin" style={{ marginRight: '10px' }}>
+                Sign In
+              </Link>
+              <Link to="/register" className="btn-signout" style={{ background: '#ff4d4f' }}>
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

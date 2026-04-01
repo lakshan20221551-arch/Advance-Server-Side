@@ -12,6 +12,9 @@ import Licenses from './pages/Licenses';
 import ShortCourses from './pages/ShortCourses';
 import EmployementHistory from './pages/EmployementHistory';
 import Bid from './pages/Bid';
+import Home from './pages/Home';
+
+import Developer from './pages/Developer';
 
 function App() {
   return (
@@ -21,7 +24,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Home />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/degree" element={<Degree />} />
@@ -30,6 +33,7 @@ function App() {
         <Route path="/short-courses" element={<ShortCourses />} />
         <Route path="/employment" element={<EmployementHistory />} />
         <Route path="/bidding" element={<Bid />} />
+        <Route path="/developer" element={<Developer />} />
       </Routes>
     </>
   );

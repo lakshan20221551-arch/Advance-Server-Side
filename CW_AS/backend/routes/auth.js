@@ -62,6 +62,11 @@ router.post("/login", async (req, res) => {
             .query("SELECT * FROM AAP_USERSDETAILS_VIEW WHERE auv_email = @Email");
 
         if (result.recordset.length === 0) {
+            await pool.request()
+                .input("Email", sql.VarChar, email)
+                .input("IPAddress", sql.VarChar, req.ip || '')
+                .input("Status", sql.VarChar, 'Failure: Invalid Email')
+                .query("INSERT INTO LOGIN_STATS (Email, IPAddress, Status) VALUES (@Email, @IPAddress, @Status)");
             return res.status(401).json({ message: "Invalid Email" });
         }
 
@@ -71,6 +76,11 @@ router.post("/login", async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.auv_password || user.Password);
 
         if (!isMatch) {
+            await pool.request()
+                .input("Email", sql.VarChar, email)
+                .input("IPAddress", sql.VarChar, req.ip || '')
+                .input("Status", sql.VarChar, 'Failure: Invalid Password')
+                .query("INSERT INTO LOGIN_STATS (Email, IPAddress, Status) VALUES (@Email, @IPAddress, @Status)");
             return res.status(401).json({ message: "Invalid Password" });
         }
 
@@ -80,6 +90,12 @@ router.post("/login", async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
+
+        await pool.request()
+            .input("Email", sql.VarChar, email)
+            .input("IPAddress", sql.VarChar, req.ip || '')
+            .input("Status", sql.VarChar, 'Success')
+            .query("INSERT INTO LOGIN_STATS (Email, IPAddress, Status) VALUES (@Email, @IPAddress, @Status)");
 
         res.json({
             message: "Login Successful",

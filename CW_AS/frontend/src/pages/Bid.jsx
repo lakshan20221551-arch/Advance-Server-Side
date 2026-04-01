@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
@@ -12,9 +12,12 @@ const Bid = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const fetchStatus = async (date) => {
+    const fetchStatus = useCallback(async (date) => {
         const token = localStorage.getItem("token");
-        if (!token) return navigate("/login");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
 
         try {
             const response = await axios.get(`http://localhost:3000/api/bids/status/${date}`, {
@@ -25,12 +28,14 @@ const Bid = () => {
             }
         } catch (err) {
             console.error("Fetch Status Error:", err);
+            // Optionally set an error message for the user
+            // setError(err.response?.data?.message || "Failed to fetch bid status.");
         }
-    };
+    }, [navigate, setStatus]); // Add navigate and setStatus to useCallback dependencies
 
     useEffect(() => {
         fetchStatus(targetDate);
-    }, [targetDate]);
+    }, [targetDate, fetchStatus]);
 
     const handleBidSubmit = async (e) => {
         e.preventDefault();
