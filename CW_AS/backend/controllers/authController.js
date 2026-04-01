@@ -63,7 +63,7 @@ class AuthController {
                 user: {
                     id: user.auv_id || user.UserID,
                     email: user.auv_email || user.Email,
-                    name: user.auv_name || user.Name
+                    //name: user.auv_name || user.Name
                 }
             });
 
