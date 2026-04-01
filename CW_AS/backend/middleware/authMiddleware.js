@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const AuthModel = require("../models/authModel");
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     // Check both standard lowercase and Capital header
     const authHeader = req.headers.authorization || req.header("Authorization");
     
@@ -12,6 +13,12 @@ const authMiddleware = (req, res, next) => {
     if (!token) return res.status(401).json({ message: "Invalid token format." });
 
     try {
+        // SECURE LOGOUT (Blacklist Implementation check)
+        const isBlacklisted = await AuthModel.isTokenBlacklisted(token);
+        if (isBlacklisted) {
+             return res.status(401).json({ message: "Token Session Destroyed (Logged Out). Please login again." });
+        }
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
         next();

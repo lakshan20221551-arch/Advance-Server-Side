@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
     // You'll need to provide actual SMTP settings here
     service: 'gmail', 
     auth: {
-        user: process.env.EMAIL_USER,
+        user: process.env.EMAIL_ADDRESS,
         pass: process.env.EMAIL_PASS
     }
 });
@@ -29,7 +29,7 @@ async function runDailyWinnerSelection() {
 
             // Send Email
             const mailOptions = {
-                from: process.env.EMAIL_USER,
+                from: process.env.EMAIL_ADDRESS,
                 to: winner.auv_email,
                 subject: 'Congratulations! You are the Alumni of the Day',
                 text: `Hello! You have won the bidding for ${targetDate} with an amount of ${winner.Amount}. You are now featured as our Alumni of the Day.`
