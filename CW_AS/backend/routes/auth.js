@@ -66,7 +66,7 @@ router.post("/login", async (req, res) => {
                 .input("Email", sql.VarChar, email)
                 .input("IPAddress", sql.VarChar, req.ip || '')
                 .input("Status", sql.VarChar, 'Failure: Invalid Email')
-                .query("INSERT INTO LOGIN_STATS (Email, IPAddress, Status) VALUES (@Email, @IPAddress, @Status)");
+                .query("INSERT INTO AAP_LOGIN_STATS (als_email, als_ip_address, als_status) VALUES (@Email, @IPAddress, @Status)");
             return res.status(401).json({ message: "Invalid Email" });
         }
 
@@ -80,7 +80,7 @@ router.post("/login", async (req, res) => {
                 .input("Email", sql.VarChar, email)
                 .input("IPAddress", sql.VarChar, req.ip || '')
                 .input("Status", sql.VarChar, 'Failure: Invalid Password')
-                .query("INSERT INTO LOGIN_STATS (Email, IPAddress, Status) VALUES (@Email, @IPAddress, @Status)");
+                .query("INSERT INTO AAP_LOGIN_STATS (als_email, als_ip_address, als_status) VALUES (@Email, @IPAddress, @Status)");
             return res.status(401).json({ message: "Invalid Password" });
         }
 
@@ -95,7 +95,7 @@ router.post("/login", async (req, res) => {
             .input("Email", sql.VarChar, email)
             .input("IPAddress", sql.VarChar, req.ip || '')
             .input("Status", sql.VarChar, 'Success')
-            .query("INSERT INTO LOGIN_STATS (Email, IPAddress, Status) VALUES (@Email, @IPAddress, @Status)");
+            .query("INSERT INTO AAP_LOGIN_STATS (als_email, als_ip_address, als_status) VALUES (@Email, @IPAddress, @Status)");
 
         res.json({
             message: "Login Successful",

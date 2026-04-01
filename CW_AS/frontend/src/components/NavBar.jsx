@@ -60,11 +60,11 @@ const NavBar = () => {
                   <span className="nav-icon"></span> Bidding
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link" to="/developer">
                   <span className="nav-icon"></span> Developer
                 </Link>
-              </li>
+              </li> */}
             </>
           )}
         </ul>
