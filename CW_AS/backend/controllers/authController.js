@@ -113,7 +113,7 @@ class AuthController {
             //const role = user.auv_role || user.Role || (user.auv_email === 'admin@gmail.com' ? 'admin' : 'user');
 
             const token = jwt.sign(
-                { id: user.auv_id || user.UserID, email: user.auv_email || user.Email, role: role },
+                { id: user.auv_id || user.UserID, email: user.auv_email || user.Email},
                 process.env.JWT_SECRET,
                 { expiresIn: "1h" } // Handles standard Timeout Handling
             );
@@ -123,7 +123,7 @@ class AuthController {
             res.json({
                 message: "Login Successful",
                 token: token,
-                user: { id: user.auv_id || user.UserID, email: user.auv_email || user.Email, role: role }
+                user: { id: user.auv_id || user.UserID, email: user.auv_email || user.Email}
             });
 
         } catch (err) {
