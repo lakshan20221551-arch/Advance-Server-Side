@@ -5,13 +5,13 @@ const sendEmail = async (options) => {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                 user: process.env.EMAIL_ADDRESS,
-                pass: process.env.EMAIL_PASS , 
+                user: process.env.EMAIL_ADDRESS,
+                pass: process.env.EMAIL_PASS,
             },
         });
 
         const mailOptions = {
-            from: `Alumni Influencers <${process.env.EMAIL_ADDRESS}>`,
+            from: `Alumni Platform <${process.env.EMAIL_ADDRESS}>`,
             to: options.to,
             subject: options.subject,
             text: options.text,
@@ -20,7 +20,7 @@ const sendEmail = async (options) => {
 
         const info = await transporter.sendMail(mailOptions);
         console.log("Email Sent Successfully: " + info.messageId);
-    } catch(err) {
+    } catch (err) {
         console.error("Email setup failed (You need to configure EMAIL_ADDRESS and EMAIL_PASS in .env):", err.message);
     }
 };

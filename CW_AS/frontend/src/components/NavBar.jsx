@@ -12,8 +12,11 @@ const NavBar = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     navigate('/login');
   };
+  
+  const role = localStorage.getItem('role');
 
   return (
     <nav className="navbar">
@@ -25,46 +28,53 @@ const NavBar = () => {
         <ul className="navbar-nav">
           {isAuthenticated && !isAuthPage && (
             <>
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard">
-                  <span className="nav-icon"></span> Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/degree">
-                  <span className="nav-icon"></span> Degrees
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/certificate">
-                  <span className="nav-icon"></span> Certifications
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/license">
-                  <span className="nav-icon"></span> Licenses
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/short-courses">
-                  <span className="nav-icon"></span> Short Courses
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/employment">
-                  <span className="nav-icon"></span> Employment History
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/bidding">
-                  <span className="nav-icon"></span> Bidding
-                </Link>
-              </li>
-              {/* <li className="nav-item">
-                <Link className="nav-link" to="/developer">
-                  <span className="nav-icon"></span> Developer
-                </Link>
-              </li> */}
+              {role === 'admin' ? (
+                // Only Developer for Admin
+                 <li className="nav-item">
+                  <Link className="nav-link" to="/developer">
+                    <span className="nav-icon"></span> Developer
+                  </Link>
+                </li>
+              ) : (
+                // Everything else for User
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/dashboard">
+                      <span className="nav-icon"></span> Home
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/degree">
+                      <span className="nav-icon"></span> Degrees
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/certificate">
+                      <span className="nav-icon"></span> Certifications
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/license">
+                      <span className="nav-icon"></span> Licenses
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/short-courses">
+                      <span className="nav-icon"></span> Short Courses
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/employment">
+                      <span className="nav-icon"></span> Employment History
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/bidding">
+                      <span className="nav-icon"></span> Bidding
+                    </Link>
+                  </li>
+                </>
+              )}
             </>
           )}
         </ul>

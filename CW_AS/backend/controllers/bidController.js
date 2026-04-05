@@ -11,6 +11,12 @@ class BidController {
             if (!profileId) {
                 return res.status(400).json({ success: false, message: "Profile not found. Please create your profile first." });
             }
+
+            const appearances = await BidModel.getMonthlyAppearances(profileId);
+            if (appearances >= 1) {
+                return res.status(400).json({ success: false, message: "Monthly appearance limit reached. You can only be featured once per month." });
+            }
+
             const bidCheck = await BidModel.checkExistingBid(profileId, targetDate);
             const bidId = bidCheck.length > 0 ? bidCheck[0].ab_bid_id : 0;
             
@@ -73,6 +79,35 @@ class BidController {
         } catch (err) {
             console.error("Fetch Winner Error:", err);
             res.status(500).json({ success: false, message: "Error fetching today's winner" });
+        }
+    }
+
+    static async getHistory(req, res) {
+        try {
+            const profileId = await BidModel.getProfileId(req.user.id);
+            if (!profileId) {
+                return res.json({ success: false, message: "Profile not found." });
+            }
+            const history = await BidModel.getHistory(profileId);
+            res.json({ success: true, history });
+        } catch (err) {
+            console.error("Bidding History Error:", err);
+            res.status(500).json({ success: false, message: "Error fetching bidding history" });
+        }
+    }
+
+    static async cancelBid(req, res) {
+        try {
+            const bidId = req.params.id;
+            const profileId = await BidModel.getProfileId(req.user.id);
+            if (!profileId) {
+                return res.json({ success: false, message: "Profile not found." });
+            }
+            await BidModel.cancelBid(bidId, profileId);
+            res.json({ success: true, message: "Bid cancelled successfully" });
+        } catch (err) {
+            console.error("Bidding Cancel Error:", err);
+            res.status(500).json({ success: false, message: "Error cancelling bid" });
         }
     }
 }

@@ -20,6 +20,7 @@ const Login = () => {
       });
       
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.user.role);
       setMessage("Login Successful! Welcome " + response.data.user.email);
       setTimeout(() => {
         navigate("/dashboard"); 
