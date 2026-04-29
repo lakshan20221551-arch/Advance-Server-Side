@@ -28,19 +28,35 @@ const NavBar = () => {
         <ul className="navbar-nav">
           {isAuthenticated && !isAuthPage && (
             <>
-              {role === 'admin' ? (
-                // Only Developer for Admin
-                 <li className="nav-item">
-                  <Link className="nav-link" to="/developer">
-                    <span className="nav-icon"></span> Developer
-                  </Link>
-                </li>
+                {role === 'admin' ? (
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/analytics">
+                      <span className="nav-icon"></span> Analytics
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/alumni">
+                      <span className="nav-icon"></span> Alumni
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/developer">
+                      <span className="nav-icon"></span> Developer
+                    </Link>
+                  </li>
+                </>
               ) : (
                 // Everything else for User
                 <>
                   <li className="nav-item">
                     <Link className="nav-link" to="/dashboard">
                       <span className="nav-icon"></span> Home
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/alumni">
+                      <span className="nav-icon"></span> Alumni
                     </Link>
                   </li>
                   <li className="nav-item">

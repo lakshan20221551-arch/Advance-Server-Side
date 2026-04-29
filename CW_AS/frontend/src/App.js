@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import NavBar from './components/NavBar';
 import ForgetPassword from './pages/ForgetPassword';
+import ResetPassword from './pages/ResetPassword';
 import Profile from './pages/Profile';
 import Degree from './pages/Degree';
 import Certificates from './pages/Certificates';
@@ -13,6 +14,7 @@ import ShortCourses from './pages/ShortCourses';
 import EmployementHistory from './pages/EmployementHistory';
 import Bid from './pages/Bid';
 import Home from './pages/Home';
+import AlumniList from './pages/AlumniList';
 
 import Developer from './pages/Developer';
 
@@ -26,6 +28,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/degree" element={<Degree />} />
         <Route path="/certificate" element={<Certificates />} />
@@ -34,6 +37,9 @@ function App() {
         <Route path="/employment" element={<EmployementHistory />} />
         <Route path="/bidding" element={<Bid />} />
         <Route path="/developer" element={<Developer />} />
+        <Route path="/analytics" element={<Dashboard />} />
+        <Route path="/alumni" element={<AlumniList />} />
+
       </Routes>
     </>
   );

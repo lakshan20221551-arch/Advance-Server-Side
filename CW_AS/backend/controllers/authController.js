@@ -24,8 +24,8 @@ class AuthController {
             const verifyToken = crypto.randomBytes(32).toString('hex');
             const verifyExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-            try { await AuthModel.setVerifyToken(email, verifyToken, verifyExpiry); } 
-            catch(dbErr) { console.error("Could not set Verify Token (ensure DB columns match):", dbErr); }
+            try { await AuthModel.setVerifyToken(email, verifyToken, verifyExpiry); }
+            catch (dbErr) { console.error("Could not set Verify Token (ensure DB columns match):", dbErr); }
 
             // 3. Send Verification Email
             const verifyUrl = `${req.protocol}://${req.get('host')}/api/auth/verify/${verifyToken}`;
@@ -56,7 +56,7 @@ class AuthController {
                 return res.status(400).send("<h3>Verification Failed</h3><p>Invalid or missing verification token.</p>");
             }
 
-            if (new Date(user.au_verify_token_expiry) < new Date()) {
+            if (new Date(user.aud_verify_token_expiry) < new Date()) {
                 return res.status(400).send("<h3>Verification Expired</h3><p>Please request a new verification token.</p>");
             }
 
@@ -64,7 +64,7 @@ class AuthController {
 
             // Responds with a simple success HTML page when confirming from email
             res.send("<h3>Success!</h3><p>Your email has been successfully verified! You can safely close this window and log in.</p>");
-        } catch(err) {
+        } catch (err) {
             console.error("Verification Error", err);
             res.status(500).send("An error occurred during verification");
         }
@@ -107,15 +107,15 @@ class AuthController {
             // [SECURITY GATES] - Blocks login if user hasn't completed Email Verification! 
             // If the query returns NULL (assuming the DB struct isn't fully set yet), we let them pass for safety, but if it explicitly returns 0, we block.
             if (user.isVerified === false || user.isVerified === 0) {
-                 return res.status(403).json({ success: false, message: "ACCOUNT NOT VERIFIED: Please check your email and click the verification link before logging in." });
+                return res.status(403).json({ success: false, message: "ACCOUNT NOT VERIFIED: Please check your email and click the verification link before logging in." });
             }
 
-            //const role = user.auv_role || user.Role || (user.auv_email === 'admin@gmail.com' ? 'admin' : 'user');
+            const role = user.aud_status === 'A' ? 'admin' : (user.auv_role || user.Role || 'user');
 
             const token = jwt.sign(
-                { id: user.auv_id || user.UserID, email: user.auv_email || user.Email},
+                { id: user.auv_id || user.UserID, email: user.auv_email || user.Email, role: role },
                 process.env.JWT_SECRET,
-                { expiresIn: "1h" } // Handles standard Timeout Handling
+                { expiresIn: "1h" }
             );
 
             await AuthModel.logLoginStat(email, req.ip || '', 'Success');
@@ -123,7 +123,11 @@ class AuthController {
             res.json({
                 message: "Login Successful",
                 token: token,
-                user: { id: user.auv_id || user.UserID, email: user.auv_email || user.Email}
+                user: { 
+                    id: user.auv_id || user.UserID, 
+                    email: user.auv_email || user.Email,
+                    role: role
+                }
             });
 
         } catch (err) {
@@ -139,7 +143,7 @@ class AuthController {
         }
 
         const token = authHeader.split(" ")[1];
-        
+
         try {
             const decoded = jwt.decode(token);
             if (!decoded) return res.status(400).json({ message: "Invalid token" });
@@ -150,14 +154,14 @@ class AuthController {
             await AuthModel.blacklistToken(token, expiry);
 
             res.json({ success: true, message: "Secure logout complete. Token session aggressively terminated." });
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             res.status(500).json({ message: "Error during logout process" });
         }
     }
 
 
-    
+
     //    PASSWORD RESET FUNCTIONALITY
 
     static async forgetPassword(req, res) {
@@ -177,8 +181,10 @@ class AuthController {
 
             await AuthModel.setResetToken(email, resetToken, resetExpiry);
 
-            const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`; 
-            
+            // Changed to 3001 because the backend is already using port 3000. 
+            // The React frontend will run on 3001.
+            const resetUrl = `http://localhost:3001/reset-password/${resetToken}`;
+
             await sendEmail({
                 to: email,
                 subject: "Alumni Platform - Password Reset Request",
@@ -197,14 +203,15 @@ class AuthController {
 
     static async resetPassword(req, res) {
         // Re-routed endpoint handling token and newPassword combo!
-        const { token, newPassword } = req.body;
+        const token = req.params.token || req.body.token;
+        const { newPassword } = req.body;
         if (!token || !newPassword) return res.status(400).json({ message: "Token and new password required" });
 
         try {
             const user = await AuthModel.getUserByResetToken(token);
             if (!user) return res.status(400).json({ message: "Invalid or unauthorized reset token." });
 
-            if (new Date(user.au_reset_token_expiry) < new Date()) {
+            if (new Date(user.aud_reset_token_expiry) < new Date()) {
                 return res.status(400).json({ message: "Reset token has officially expired. Please request a new one." });
             }
 

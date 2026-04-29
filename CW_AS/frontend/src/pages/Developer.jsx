@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Developer.css';
 
 const Developer = () => {
@@ -9,7 +9,7 @@ const Developer = () => {
 
     const token = localStorage.getItem('token');
 
-    const fetchKeys = async () => {
+    const fetchKeys = useCallback(async () => {
         try {
             const res = await fetch('http://localhost:3000/api/api-keys/my-keys', {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -21,9 +21,9 @@ const Developer = () => {
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [token]);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const res = await fetch('http://localhost:3000/api/api-keys/stats', {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -35,13 +35,13 @@ const Developer = () => {
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [token]);
 
     useEffect(() => {
         fetchKeys();
         fetchStats();
         setLoading(false);
-    }, []);
+    }, [fetchKeys, fetchStats]);
 
     const handleGenerateKey = async (e) => {
         e.preventDefault();

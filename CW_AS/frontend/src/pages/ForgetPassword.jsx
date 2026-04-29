@@ -1,40 +1,34 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../App.css";
-import { useNavigate } from "react-router-dom";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  
-  const navigate = useNavigate(); 
+  const [error, setError] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setError("");
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/forget-password", {
+      // Calling the correct backend route: /forgot-password
+      const response = await axios.post("http://localhost:3000/api/auth/forgot-password", {
         email,
-        password,
       });
 
-      setMessage("Reset Password Successfully! Redirecting to login...");
-      
-      
+      setMessage("If that email matches an account, a reset link will be sent shortly. Please check your inbox.");
 
     } catch (err) {
-      setMessage(err.response?.data?.message  || "Reset Password Failed");
-
-      setTimeout(() => {
-        navigate("/login"); 
-      }, 2000);
+      setError(err.response?.data?.message || "Failed to process request");
     }
   };
 
   return (
     <div className="card">
     <div className="auth-card">
-      <h2>Forget Password</h2>
+      <h2>Forgot Password</h2>
+      <p className="auth-subtitle">Enter your email to receive a password reset link.</p>
       <form onSubmit={handleRegister}>
         <div className="input-group">
           <label>Email Address</label>
@@ -42,22 +36,13 @@ const ForgetPassword = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            // placeholder="lakshan.20221551@iit.ac.lk"
             required
           />
         </div>
-        <div className="input-group">
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="auth-btn register-btn">Reset Password</button>
+        <button type="submit" className="auth-btn register-btn">Send Reset Link</button>
       </form>
       {message && <p className="message success">{message}</p>}
+      {error && <p className="message error" style={{color: 'red'}}>{error}</p>}
     </div>
     </div>
   );

@@ -51,7 +51,7 @@ class AuthModel {
         const result = await pool.request()
             .input("Email", sql.VarChar, email)
             .query(`
-                SELECT TOP 1 v.*, ISNULL(u.aud_is_verified, 0) as isVerified 
+                SELECT TOP 1 v.*, ISNULL(u.aud_is_verified, 0) as isVerified, u.aud_status
                 FROM AAP_USERSDETAILS_VIEW v
                 LEFT JOIN AAP_USERS_DETAILS u ON v.auv_email = u.aud_email 
                 WHERE v.auv_email = @Email
@@ -78,7 +78,7 @@ class AuthModel {
             .query(`
                 UPDATE AAP_USERS_DETAILS
                 SET aud_reset_token = @Token, aud_reset_token_expiry = @Expiry 
-                WHERE aud_email = @Email OR email = @Email
+                WHERE aud_email = @Email
             `);
     }
 

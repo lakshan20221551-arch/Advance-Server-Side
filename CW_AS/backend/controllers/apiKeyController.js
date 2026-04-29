@@ -5,14 +5,17 @@ const ApiKeyModel = require("../models/apiKeyModel");
 class ApiKeyController {
     static async generate(req, res) {
         try {
-            const { clientName } = req.body;
+            const { clientName, scopes } = req.body;
             if (!clientName) return res.status(400).json({ message: "Client name is required." });
 
             const apiKey = crypto.randomBytes(32).toString('hex');
             
-            await ApiKeyModel.createApiKey(req.user.id, clientName, apiKey);
+            // Default to read:analytics if no scopes provided
+            const finalScopes = scopes || 'read:analytics';
+            
+            await ApiKeyModel.createApiKey(req.user.id, clientName, apiKey, finalScopes);
 
-            res.status(201).json({ message: "API Key generated successfully", apiKey });
+            res.status(201).json({ message: "API Key generated successfully", apiKey, scopes: finalScopes });
         } catch (err) {
             console.error(err);
             res.status(500).json({ message: "Server error" });

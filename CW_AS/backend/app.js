@@ -13,13 +13,15 @@ const employmentRoutes = require("./routes/employmentHistory")
 const degreeRoutes = require("./routes/degree")
 const certificateRoutes = require("./routes/certificate")
 const bidRoutes = require("./routes/bids") // Re-added
+const alumniRoutes = require("./routes/alumni");
 
 const apiKeysRoutes = require("./routes/apiKeys");
 const publicApiRoutes = require("./routes/publicApi");
+const analyticsRoutes = require("./routes/analyticsRoutes");
+const donationRoutes = require("./routes/donations");
 
 require("./cron/winnerCron")
 
-const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
 const app = express()
@@ -35,35 +37,8 @@ max:100
 }))
 
 // Swagger Setup
-const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Alumni Influencers API',
-            version: '1.0.0',
-            description: 'API documentation for the Alumni Influencers backend.',
-        },
-        servers: [
-            {
-                url: 'http://localhost:3000',
-                description: 'Development Server'
-            }
-        ],
-        components: {
-            securitySchemes: {
-                bearerAuth: {
-                    type: 'http',
-                    scheme: 'bearer',
-                    bearerFormat: 'API_KEY'
-                }
-            }
-        }
-    },
-    apis: ['./routes/*.js'],
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+const swaggerDocument = require("./utils/swagger.json");
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/auth",authRoutes)
 app.use("/api/profile",profileRoutes)
@@ -76,5 +51,8 @@ app.use("/api/employment",employmentRoutes)
 
 app.use("/api/api-keys", apiKeysRoutes)
 app.use("/api/public", publicApiRoutes)
+app.use("/api/analytics", analyticsRoutes)
+app.use("/api/donations", donationRoutes)
+app.use("/api/alumni", alumniRoutes)
 
 module.exports = app

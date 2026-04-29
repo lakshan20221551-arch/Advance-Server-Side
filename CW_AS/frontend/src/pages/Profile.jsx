@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
@@ -79,7 +79,7 @@ const Profile = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:3000/api/profile/profile", data, {
+            await axios.post("http://localhost:3000/api/profile/profile", data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${token}`

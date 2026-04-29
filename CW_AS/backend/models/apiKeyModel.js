@@ -1,20 +1,21 @@
 const { sql, poolPromise } = require("../config/db");
 
 class ApiKeyModel {
-    static async createApiKey(userId, clientName, apiKey) {
+    static async createApiKey(userId, clientName, apiKey, scopes = 'read:analytics') {
         const pool = await poolPromise;
         await pool.request()
             .input("UserID", sql.Int, userId)
             .input("ClientName", sql.VarChar, clientName)
             .input("ApiKey", sql.VarChar, apiKey)
-            .query("INSERT INTO AAP_API_KEYS (aak_user_id, aak_name, aak_api_key) VALUES (@UserID, @ClientName, @ApiKey)");
+            .input("Scopes", sql.VarChar, scopes)
+            .query("INSERT INTO AAP_API_KEYS (aak_user_id, aak_name, aak_api_key, aak_scopes) VALUES (@UserID, @ClientName, @ApiKey, @Scopes)");
     }
 
     static async getKeysByUser(userId) {
         const pool = await poolPromise;
         const result = await pool.request()
             .input("UserID", sql.Int, userId)
-            .query("SELECT aak_key_id AS KeyID, aak_name AS ClientName, aak_api_key AS ApiKey, aak_is_revoked AS IsRevoked, aak_created_date AS CreatedAt FROM AAP_API_KEYS WHERE aak_user_id = @UserID");
+            .query("SELECT aak_key_id AS KeyID, aak_name AS ClientName, aak_api_key AS ApiKey, aak_is_revoked AS IsRevoked, aak_scopes AS Scopes, aak_created_date AS CreatedAt FROM AAP_API_KEYS WHERE aak_user_id = @UserID");
         return result.recordset;
     }
 
@@ -31,7 +32,7 @@ class ApiKeyModel {
         const pool = await poolPromise;
         const result = await pool.request()
             .input("ApiKey", sql.VarChar, apiKey)
-            .query("SELECT aak_key_id AS KeyID, aak_user_id AS UserID, aak_name AS ClientName, aak_is_revoked AS IsRevoked FROM AAP_API_KEYS WHERE aak_api_key = @ApiKey");
+            .query("SELECT aak_key_id AS KeyID, aak_user_id AS UserID, aak_name AS ClientName, aak_is_revoked AS IsRevoked, aak_scopes AS Scopes FROM AAP_API_KEYS WHERE aak_api_key = @ApiKey");
         return result.recordset.length > 0 ? result.recordset[0] : null;
     }
 
