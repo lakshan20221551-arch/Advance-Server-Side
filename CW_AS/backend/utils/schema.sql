@@ -1,5 +1,5 @@
 -- Alumni Influencers Database Schema
--- Student ID: w1956194
+-- Student ID: 20221551
 -- Database: SQL Server (MSSQL)
 
 -- 1. Users & Authentication
@@ -145,3 +145,8 @@ GO
 CREATE VIEW AAP_SHORTCOURSES_VIEW AS
 SELECT * FROM AAP_SHORT_COURSES;
 GO
+
+
+UPDATE AAP_USERS_DETAILS
+SET aud_is_verified = 1
+WHERE aud_id = 25

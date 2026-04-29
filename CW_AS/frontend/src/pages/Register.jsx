@@ -21,14 +21,14 @@ const Register = () => {
         password,
       });
 
-      setMessage("Registration Successful! Redirecting to login...");
+      setMessage(response.data.message || "Registration Successful! Please check your email to verify your account.");
       
       setTimeout(() => {
         navigate("/login"); 
-      }, 2000);
+      }, 4000);
 
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      setError(err.response?.data?.message || err.response?.data?.error || "Registration failed");
     }
   };
 

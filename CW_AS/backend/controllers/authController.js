@@ -76,19 +76,6 @@ class AuthController {
     static async login(req, res) {
         const { email, password } = req.body;
 
-        if (email === "admin@admin.com" && password === "admin123") {
-            const token = jwt.sign(
-                { id: 0, email: email, role: 'admin' },
-                process.env.JWT_SECRET,
-                { expiresIn: "1h" }
-            );
-            return res.json({
-                message: "Admin Login Successful (Bypass Mode)",
-                token: token,
-                user: { id: 0, email: email, role: 'admin' }
-            });
-        }
-
         try {
             const user = await AuthModel.getUserByEmail(email);
 
@@ -97,7 +84,16 @@ class AuthController {
                 return res.status(401).json({ message: "Invalid Email" });
             }
 
-            const isMatch = await bcrypt.compare(password, user.auv_password || user.Password);
+            let isMatch = false;
+            // Admin users in the database (aud_status = 'A') might have plain text passwords
+            if (user.aud_status === 'A') {
+                isMatch = password === (user.aud_password || user.auv_password || user.Password);
+                if (!isMatch) {
+                    isMatch = await bcrypt.compare(password, user.aud_password || user.auv_password || user.Password);
+                }
+            } else {
+                isMatch = await bcrypt.compare(password, user.aud_password || user.auv_password || user.Password);
+            }
 
             if (!isMatch) {
                 await AuthModel.logLoginStat(email, req.ip || '', 'Failure: Invalid Password');
@@ -105,12 +101,20 @@ class AuthController {
             }
 
             // [SECURITY GATES] - Blocks login if user hasn't completed Email Verification! 
-            // If the query returns NULL (assuming the DB struct isn't fully set yet), we let them pass for safety, but if it explicitly returns 0, we block.
-            if (user.isVerified === false || user.isVerified === 0) {
+            // Bypass verification for Admin users
+            if (user.aud_status !== 'A' && (user.isVerified === false || user.isVerified === 0)) {
                 return res.status(403).json({ success: false, message: "ACCOUNT NOT VERIFIED: Please check your email and click the verification link before logging in." });
             }
 
-            const role = user.aud_status === 'A' ? 'admin' : (user.auv_role || user.Role || 'user');
+            // aud_status 'A' is admin, null is user
+            let role = 'user';
+            if (user.aud_status === 'A') {
+                role = 'admin';
+            } else if (user.aud_status === null) {
+                role = 'user';
+            } else {
+                role = user.auv_role || user.Role || 'user';
+            }
 
             const token = jwt.sign(
                 { id: user.auv_id || user.UserID, email: user.auv_email || user.Email, role: role },

@@ -172,12 +172,12 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="header-content">
-          <h1>University Strategic Intelligence</h1>
-          <p className="subtitle">Transforming alumni data into actionable curriculum and placement insights</p>
+          <h1>University Analytics Dashboard</h1>
+          <p className="subtitle">Alumni data and placement insights</p>
         </div>
         <div className="export-buttons">
-          <button onClick={exportCSV} className="btn-secondary" type="button">Export Data</button>
-          <button onClick={exportPDF} className="btn-primary" type="button">Generate Strategic Report</button>
+          <button onClick={exportCSV} className="btn-secondary" type="button">Export CSV</button>
+          <button onClick={exportPDF} className="btn-primary" type="button">Generate PDF Report</button>
         </div>
       </header>
 
@@ -213,7 +213,7 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {loading && <div className="loading-shimmer">Analyzing Strategic Data...</div>}
+      {loading && <div className="loading-shimmer">Loading data...</div>}
       {error && <p className="error-message">{error}</p>}
 
       {!loading && !error && (
@@ -242,11 +242,10 @@ const Dashboard = () => {
             {/* Scenario 1: Skills Gap Detection */}
             <div className="chart-card scenario-card highlight-border">
               <div className="scenario-header">
-                <span className="scenario-badge">Scenario 1</span>
-                <h3>Skills Gap Detection</h3>
+                <h3>Skills Learned After Graduation</h3>
               </div>
               <p className="scenario-description">
-                Detecting curriculum gaps by analyzing independent skill acquisition within 18 months of graduation.
+                Comparing skills taught at the university vs skills learned by alumni.
               </p>
               <ResponsiveContainer width="100%" height={300}>
                 {analytics.skillsGap && analytics.skillsGap.length > 0 ? (
@@ -264,18 +263,17 @@ const Dashboard = () => {
                 )}
               </ResponsiveContainer>
               <div className="insight-box critical">
-                <strong>Strategic Intelligence:</strong> High acquisition of <strong>Docker/Kubernetes</strong> (73% of CS alumni) signals a critical curriculum gap that should be addressed for future cohorts.
+                <strong>Insight:</strong> Many CS alumni learned <strong>Docker/Kubernetes</strong> after graduation.
               </div>
             </div>
 
             {/* Scenario 2: Emerging Career Pathways */}
             <div className="chart-card scenario-card">
               <div className="scenario-header">
-                <span className="scenario-badge">Scenario 2</span>
-                <h3>Emerging Career Pathways</h3>
+                <h3>Common Career Paths</h3>
               </div>
               <p className="scenario-description">
-                Identifying roles graduates transition into despite a lack of formal degree alignment.
+                Showing which job roles graduates transition into.
               </p>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart layout="vertical" data={analytics.careerPathways} margin={{ top: 10, right: 30, left: 60, bottom: 10 }}>
@@ -287,25 +285,24 @@ const Dashboard = () => {
                 </BarChart>
               </ResponsiveContainer>
               <div className="insight-box secondary">
-                <strong>Strategic Intelligence:</strong> 23% of Business graduates are entering <strong>Data Analytics</strong> roles. Integration of Python and SQL into non-CS modules is recommended.
+                <strong>Insight:</strong> Some Business graduates are moving into <strong>Data Analytics</strong> roles.
               </div>
             </div>
 
             {/* Scenario 3: Industry Demand Tracking */}
             <div className="chart-card scenario-card">
               <div className="scenario-header">
-                <span className="scenario-badge">Scenario 3</span>
-                <h3>Industry Demand Tracking</h3>
+                <h3>Certification Trends</h3>
               </div>
               <p className="scenario-description">
-                Monitoring rapid shifts in industry certification requirements to proactively adjust course content.
+                Tracking the most popular certifications among alumni.
               </p>
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={analytics.certificationTrend}>
                   <defs>
                     <linearGradient id="colorCloud" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
@@ -319,18 +316,17 @@ const Dashboard = () => {
                 </AreaChart>
               </ResponsiveContainer>
               <div className="insight-box info">
-                <strong>Strategic Intelligence:</strong> Cloud certifications have increased <strong>156%</strong> in 6 months. Recommend integrating AWS/Azure training early in the degree lifecycle.
+                <strong>Insight:</strong> Cloud certifications like AWS and Azure are becoming more popular.
               </div>
             </div>
 
             {/* Scenario 4: Professional Development Trends */}
             <div className="chart-card scenario-card">
               <div className="scenario-header">
-                <span className="scenario-badge">Scenario 4</span>
-                <h3>Professional Development Trends</h3>
+                <h3>Popular Post-Graduation Courses</h3>
               </div>
               <p className="scenario-description">
-                Tracking most popular post-graduation courses to identify critical workplace practices missing from the degree.
+                Showing the most popular courses taken after graduation.
               </p>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={analytics.coursesPopularity}>
@@ -346,13 +342,13 @@ const Dashboard = () => {
                 </BarChart>
               </ResponsiveContainer>
               <div className="insight-box success">
-                <strong>Strategic Intelligence:</strong> <strong>Agile/Scrum</strong> certifications are completed by 31% of graduates, suggesting a need for Agile modules in student project work.
+                <strong>Insight:</strong> <strong>Agile/Scrum</strong> courses are popular among recent graduates.
               </div>
             </div>
 
             {/* Geographic Distribution */}
             <div className="chart-card">
-              <h3>Global Placement Footprint</h3>
+              <h3>Top Industries for Alumni</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -373,12 +369,12 @@ const Dashboard = () => {
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
-              <p className="chart-insight">Breakdown of primary industry clusters where alumni are currently generating impact.</p>
+              <p className="chart-insight">Showing which industries our alumni are working in.</p>
             </div>
 
             {/* Engagement Doughnut */}
             <div className="chart-card">
-              <h3>Network Engagement Lifecycle</h3>
+              <h3>Alumni Activity</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -400,7 +396,7 @@ const Dashboard = () => {
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
-              <p className="chart-insight">Tracking active contribution levels across the alumni network for mentoring and strategic support.</p>
+              <p className="chart-insight">Showing how active alumni are in mentoring and donating.</p>
             </div>
           </div>
         </div>

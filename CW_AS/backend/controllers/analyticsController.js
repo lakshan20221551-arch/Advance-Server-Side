@@ -96,23 +96,18 @@ exports.getDashboardAnalytics = async (req, res) => {
       fullMark: 100
     }));
 
-    // --- SCENARIO 2: EMERGING CAREER PATHWAYS (Detecting Cross-Domain Transitions) ---
+    // --- SCENARIO 2: COMMON CAREER PATHS ---
     const crossDomainResult = await request.query(`
       SELECT TOP 6 
         d.adv_degree_name as origin,
         eh.aev_position as destination,
-        COUNT(*) as count
+        COUNT(DISTINCT u.aud_id) as count
       FROM AAP_USERS_DETAILS u
       JOIN AAP_DEGREEDETAILS_VIEW d ON d.adv_user_id = u.aud_id
       JOIN AAP_EMPLOYMENTHISTORY_VIEW eh ON eh.aev_user_id = u.aud_id
       ${whereClause}
-      AND (
-        (d.adv_degree_name LIKE '%Business%' AND (eh.aev_position LIKE '%Data%' OR eh.aev_position LIKE '%Analyst%')) OR
-        (d.adv_degree_name LIKE '%Arts%' AND (eh.aev_position LIKE '%Design%' OR eh.aev_position LIKE '%UX%')) OR
-        (d.adv_degree_name LIKE '%Engineering%' AND (eh.aev_position LIKE '%Manager%' OR eh.aev_position LIKE '%Product%')) OR
-        (d.adv_degree_name LIKE '%Computer%' AND (eh.aev_position LIKE '%Consultant%' OR eh.aev_position LIKE '%Founder%'))
-      )
       GROUP BY d.adv_degree_name, eh.aev_position
+      HAVING d.adv_degree_name IS NOT NULL AND eh.aev_position IS NOT NULL
       ORDER BY count DESC
     `);
 
@@ -159,6 +154,51 @@ exports.getDashboardAnalytics = async (req, res) => {
       GROUP BY eh.aev_company ORDER BY value DESC
     `);
 
+    // --- SCENARIO 5: ENGAGEMENT STATUS (Active, Inactive, Mentoring, Donating) ---
+    const engagementResult = await request.query(`
+      SELECT 
+        (SELECT COUNT(DISTINCT u.aud_id) 
+         FROM AAP_USERS_DETAILS u 
+         LEFT JOIN AAP_DEGREEDETAILS_VIEW d ON d.adv_user_id = u.aud_id 
+         LEFT JOIN AAP_EMPLOYMENTHISTORY_VIEW eh ON eh.aev_user_id = u.aud_id 
+         ${whereClause} 
+         AND EXISTS (SELECT 1 FROM AAP_LOGIN_STATS ls WHERE ls.als_email = u.aud_email AND ls.als_login_time >= DATEADD(day, -30, GETDATE()))
+        ) AS Active,
+        
+        (SELECT COUNT(DISTINCT u.aud_id) 
+         FROM AAP_USERS_DETAILS u 
+         LEFT JOIN AAP_DEGREEDETAILS_VIEW d ON d.adv_user_id = u.aud_id 
+         LEFT JOIN AAP_EMPLOYMENTHISTORY_VIEW eh ON eh.aev_user_id = u.aud_id 
+         ${whereClause} 
+         AND NOT EXISTS (SELECT 1 FROM AAP_LOGIN_STATS ls WHERE ls.als_email = u.aud_email AND ls.als_login_time >= DATEADD(day, -30, GETDATE()))
+        ) AS Inactive,
+        
+        (SELECT COUNT(DISTINCT u.aud_id) 
+         FROM AAP_USERS_DETAILS u 
+         LEFT JOIN AAP_DEGREEDETAILS_VIEW d ON d.adv_user_id = u.aud_id 
+         LEFT JOIN AAP_EMPLOYMENTHISTORY_VIEW eh ON eh.aev_user_id = u.aud_id 
+         JOIN AAP_PROFILES_DETAILS p ON p.apd_user_id = u.aud_id
+         JOIN AAP_BIDS b ON b.ab_profile_id = p.apd_user_id
+         ${whereClause}
+        ) AS Donating,
+        
+        (SELECT COUNT(DISTINCT u.aud_id) 
+         FROM AAP_USERS_DETAILS u 
+         LEFT JOIN AAP_DEGREEDETAILS_VIEW d ON d.adv_user_id = u.aud_id 
+         LEFT JOIN AAP_EMPLOYMENTHISTORY_VIEW eh ON eh.aev_user_id = u.aud_id 
+         ${whereClause}
+         AND (eh.aev_position LIKE '%Mentor%' OR eh.aev_position LIKE '%Advisor%')
+        ) AS Mentoring
+    `);
+
+    const engagementData = engagementResult.recordset[0];
+    const engagementStatus = [
+      { name: 'Active', value: engagementData.Active || 0 },
+      { name: 'Inactive', value: engagementData.Inactive || 0 },
+      { name: 'Mentoring', value: engagementData.Mentoring || 0 },
+      { name: 'Donating', value: engagementData.Donating || 0 }
+    ].filter(item => item.value > 0);
+
     const summaryResult = await request.query(`
       SELECT 
         (SELECT COUNT(DISTINCT u.aud_id) FROM AAP_USERS_DETAILS u LEFT JOIN AAP_DEGREEDETAILS_VIEW d ON d.adv_user_id = u.aud_id LEFT JOIN AAP_EMPLOYMENTHISTORY_VIEW eh ON eh.aev_user_id = u.aud_id ${whereClause}) AS totalAlumni,
@@ -175,17 +215,14 @@ exports.getDashboardAnalytics = async (req, res) => {
 
     res.json({
       skillsGap,
-      careerPathways: careerPathways.length > 0 ? careerPathways : [
-        { name: 'Business to Data', value: 23 },
-        { name: 'Arts to UI/UX', value: 15 },
-        { name: 'Eng to Product', value: 12 }
-      ],
+      careerPathways,
       certificationTrend: certTrendResult.recordset.map(item => ({
         month: item.month,
         AWS: Number(item.AWS),
         Azure: Number(item.Azure),
         GCP: Number(item.GCP)
       })),
+      engagementStatus,
       coursesPopularity: coursesPopularityResult.recordset.length > 0 ? coursesPopularityResult.recordset : [
         { subject: 'Agile/Scrum', value: 31 },
         { subject: 'Python for Data', value: 25 },

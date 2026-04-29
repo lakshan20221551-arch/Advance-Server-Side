@@ -75,7 +75,7 @@ const AlumniList = () => {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <h1>Alumni Directory</h1>
-        <p style={{ color: 'var(--text-muted)' }}>Connect with our global network of graduates</p>
+        <p style={{ color: 'var(--text-muted)' }}></p>
       </header>
 
       <section className="filters-section">

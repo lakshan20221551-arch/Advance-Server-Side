@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Alumni Influencers API - w1956194",
+    "title": "Alumni Influencers API - 20221551",
     "version": "1.0.0",
-    "description": "API documentation for the Alumni Influencers backend system. Student ID: w1956194"
+    "description": "API documentation for the Alumni Influencers backend system. Student ID: 20221551"
   },
   "servers": [
     {
@@ -28,7 +28,9 @@
   "paths": {
     "/api/auth/register": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Register a new user",
         "requestBody": {
           "required": true,
@@ -37,23 +39,39 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "format": "email" },
-                  "password": { "type": "string" }
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "lakshan.20221551@iit.ac.lk"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Laka123@"
+                  }
                 },
-                "required": ["email", "password"]
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
         },
         "responses": {
-          "201": { "description": "User registered successfully" },
-          "400": { "description": "Invalid input" }
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
         }
       }
     },
     "/api/auth/login": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Login to the system",
         "requestBody": {
           "required": true,
@@ -62,51 +80,83 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "format": "email" },
-                  "password": { "type": "string" }
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "lakshan.20221551@iit.ac.lk"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Laka123@"
+                  }
                 },
-                "required": ["email", "password"]
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Login successful" },
-          "401": { "description": "Invalid credentials" }
+          "200": {
+            "description": "Login successful"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
         }
       }
     },
     "/api/auth/verify/{token}": {
       "get": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Verify email address",
         "parameters": [
           {
             "name": "token",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Verification successful" },
-          "400": { "description": "Invalid token" }
+          "200": {
+            "description": "Verification successful"
+          },
+          "400": {
+            "description": "Invalid token"
+          }
         }
       }
     },
     "/api/auth/logout": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Logout and terminate session",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
-          "200": { "description": "Logout successful" }
+          "200": {
+            "description": "Logout successful"
+          }
         }
       }
     },
     "/api/auth/forgot-password": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Request password reset link",
         "requestBody": {
           "required": true,
@@ -115,21 +165,30 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "format": "email" }
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
                 },
-                "required": ["email"]
+                "required": [
+                  "email"
+                ]
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Reset link sent if email exists" }
+          "200": {
+            "description": "Reset link sent if email exists"
+          }
         }
       }
     },
     "/api/auth/reset-password": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Reset password using token",
         "requestBody": {
           "required": true,
@@ -138,90 +197,191 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "token": { "type": "string" },
-                  "newPassword": { "type": "string" }
+                  "token": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string"
+                  }
                 },
-                "required": ["token", "newPassword"]
+                "required": [
+                  "token",
+                  "newPassword"
+                ]
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Password updated successfully" }
+          "200": {
+            "description": "Password updated successfully"
+          }
         }
       }
     },
     "/api/profile/profile": {
       "get": {
-        "tags": ["Profile"],
+        "tags": [
+          "Profile"
+        ],
         "summary": "Get current user profile",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
-          "200": { "description": "Profile data retrieved" }
+          "200": {
+            "description": "Profile data retrieved"
+          }
         }
       },
       "post": {
-        "tags": ["Profile"],
+        "tags": [
+          "Profile"
+        ],
         "summary": "Update current user profile",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "apd_full_name": { "type": "string" },
-                  "apd_bio": { "type": "string" },
-                  "apd_linkedIn_url": { "type": "string" },
-                  "apd_profile_image": { "type": "string", "format": "binary" }
+                  "apd_full_name": {
+                    "type": "string"
+                  },
+                  "apd_bio": {
+                    "type": "string"
+                  },
+                  "apd_linkedIn_url": {
+                    "type": "string"
+                  },
+                  "apd_profile_image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Profile updated successfully" }
+          "200": {
+            "description": "Profile updated successfully"
+          }
         }
       }
     },
     "/api/alumni": {
       "get": {
-        "tags": ["Alumni"],
+        "tags": [
+          "Alumni"
+        ],
         "summary": "Get filtered list of alumni",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
-          { "name": "programme", "in": "query", "schema": { "type": "string" } },
-          { "name": "graduationYear", "in": "query", "schema": { "type": "integer" } },
-          { "name": "sector", "in": "query", "schema": { "type": "string" } }
+          {
+            "name": "programme",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "graduationYear",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sector",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
-          "200": { "description": "List of alumni" }
+          "200": {
+            "description": "List of alumni"
+          }
         }
       }
     },
     "/api/analytics": {
       "get": {
-        "tags": ["Analytics"],
+        "tags": [
+          "Analytics"
+        ],
         "summary": "Main dashboard analytics data",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
-          { "name": "x-api-key", "in": "header", "required": true, "schema": { "type": "string" } },
-          { "name": "programme", "in": "query", "schema": { "type": "string" } },
-          { "name": "graduationYear", "in": "query", "schema": { "type": "integer" } },
-          { "name": "sector", "in": "query", "schema": { "type": "string" } }
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "programme",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "graduationYear",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sector",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
-          "200": { "description": "Analytics data" }
+          "200": {
+            "description": "Analytics data"
+          }
         }
       }
     },
     "/api/analytics/filters": {
       "get": {
-        "tags": ["Analytics"],
+        "tags": [
+          "Analytics"
+        ],
         "summary": "Get filter options for analytics",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
-          "200": { "description": "Filter options list" }
+          "200": {
+            "description": "Filter options list"
+          }
         }
       }
     }
